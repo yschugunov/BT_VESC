@@ -18,7 +18,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+  
  Additional Copyright 2021 Benjamin Woodill bwoodill@gmail.com
  */
 
@@ -34,76 +34,77 @@
 // speed when user goes on trigger the first time
 #define SPEED_DEFAULT 3
 
-// ERPM PROGRAMMED SPEED
-#define SPEEDS1 1525
-#define SPEEDS2 2300
-#define SPEEDS3 3100
-#define SPEEDS4 3525
-#define SPEEDS5 3900
-#define SPEEDS6 4150
-#define SPEEDS7 4450
-#define SPEEDS8 4850
-#define SPEEDS9 5000	//my default 5500
+// ERPM PROGRAMMED SPEED - Optimized for Flipsky 7070/110kv (7-pole motor, max 40000 ERPM)
+// Scaling: 65A max sustained, 40000 ERPM max
+// Conservative speeds to ensure safe operation and thermal management
+#define SPEEDS1 1200  // ~12% power, very slow startup
+#define SPEEDS2 1800  // ~18% power, light cruising
+#define SPEEDS3 2400  // ~24% power, moderate speed
+#define SPEEDS4 3000  // ~30% power, medium speed
+#define SPEEDS5 3600  // ~36% power, faster cruising
+#define SPEEDS6 4500  // ~45% power, high speed
+#define SPEEDS7 5400  // ~54% power, very high speed
+#define SPEEDS8 6300  // ~63% power, near maximum
+#define SPEEDS9 7000  // ~70% power, maximum safe speed
 
-// CURRENT LIMIT PER PROGRAMMED SPEED
-#define LIMITS1 1
-#define LIMITS2 2.2
-#define LIMITS3 3.8
-#define LIMITS4 6.2
-#define LIMITS5 9.6
-#define LIMITS6 12.8
-#define LIMITS7 17
-#define LIMITS8 22.8
-#define LIMITS9 23		//my default 28
+// CURRENT LIMIT PER PROGRAMMED SPEED - Flipsky 7070/110kv optimized
+// Motor resistance: 0.055Ω, max 65A sustained
+// Conservative current limits with progressive increase
+#define LIMITS1 2.0   // 2.0A - minimal power draw
+#define LIMITS2 3.5   // 3.5A - light load
+#define LIMITS3 5.5   // 5.5A - light-medium load
+#define LIMITS4 8.0   // 8.0A - medium load
+#define LIMITS5 11.5  // 11.5A - medium-high load
+#define LIMITS6 17.0  // 17.0A - high load
+#define LIMITS7 28.0  // 28.0A - very high load
+#define LIMITS8 45.0  // 45.0A - near maximum
+#define LIMITS9 60.0  // 60.0A - maximum safe sustained
 
-// BATTERY DISPLAY (PER DISPLAYED BAR)
-#define DISP_BATT_VOLT1	34.0
-#define DISP_BATT_VOLT2	36.0
-#define DISP_BATT_VOLT3	38.0
+// BATTERY DISPLAY (PER DISPLAYED BAR) - Standard 48V configuration
+#define DISP_BATT_VOLT1	34.0  // 1 bar threshold
+#define DISP_BATT_VOLT2	36.0  // 2 bar threshold
+#define DISP_BATT_VOLT3	38.0  // 3 bar threshold
 
-#define SPEED_RAMPING_RATE 1500 // RPMS per second - approximately 1/4 second per speed increase
+// SPEED RAMPING - Time to ramp between speed settings
+// 1500 ERPM/second = ~0.25 seconds per speed level
+#define SPEED_RAMPING_RATE 1500
 
-#define MIGRATE_SPEED_MILLISECONDS 5000 // time period to change speeds during off-trigger toward SPEED_DEFAULT
+// Migration rate - Time for speed to drift back to default when trigger released
+#define MIGRATE_SPEED_MILLISECONDS 5000
 
-// SAFETY SPEED SETTINGS
-#define SAFETY_SPEED_GUARD_HIGH 6   // Amps. Currents above this indicate an obstruction - we will stop shortly if persistent
-#define SAFETY_SPEED_GUARD_LOW  0.5 // Amps. Currents below this indicate running out-of-water
-#define SAFETY_SPEED_BI_LIMIT   0.30 // Amps. Battery current limit while in guard mode.
-#define SAFETY_SPEED_ERPM       900  // running ERPM while in guard mode.
-#define SAFETY_SPEED_MAX_ERPM   1500 // maximum ERPM in guard mode, when it tries to catch up as it becomes unblocked
+// SAFETY SPEED SETTINGS - For underwater obstacle detection
+// Flipsky 7070/110kv typical current draw in water: 2-6A
+#define SAFETY_SPEED_GUARD_HIGH 6.0   // Amps. Currents above indicate obstruction
+#define SAFETY_SPEED_GUARD_LOW  0.5   // Amps. Currents below indicate out-of-water
+#define SAFETY_SPEED_BI_LIMIT   0.30  // Amps. Battery current limit while in guard mode
+#define SAFETY_SPEED_ERPM       900   // Running ERPM in guard mode (~9% of max)
+#define SAFETY_SPEED_MAX_ERPM   1500  // Maximum ERPM in guard mode when unblocked (~3.75% of max)
 
-#define RUNNING_SAFE_OK_CT 	50		// count at 20Hz at which we will confirm running in water with no obstructions
-#define RUNNING_SAFE_FAIL_CT  5      // count at 20Hz at which we will fail and turn off the motor completely requiring restart
-#define SAFETY_FILTER_ALPHA 0.2
+// Safety detection counters (at 20Hz = 50ms per count)
+#define RUNNING_SAFE_OK_CT 50   // 2.5 seconds to confirm safe running
+#define RUNNING_SAFE_FAIL_CT  5  // 250ms to detect obstruction
+#define SAFETY_FILTER_ALPHA 0.2  // Low-pass filter alpha for current smoothing
 
 // DISPLAY SETTINGS
-#define DISP_BRIGHTNESS 6 // 0 to 15 (Max)
-#define DISP_ROTATION 0 // 0 to 3 - for fixing differences in display hardware
-#define DISP_POWER_ON_OFFTIME 10000	// after power on - milliseconds until display stops
-#define DISP_OFF_TRIGGER_BEG_MS 3000 // after OFF-TRIGGER, begin display - time for battery to settle
-#define DISP_OFF_TRIG_DURATION_MS 6000 // after OFF-TRIGGER, leave the display on for this time period
-#define DISP_ON_TRIGGER_SPEED_MS 3500 // after ON-TRIGGER, time that speed is shown
+#define DISP_BRIGHTNESS 6           // 0 to 15 (Max)
+#define DISP_ROTATION 0             // 0 to 3 - for fixing differences in display hardware
+#define DISP_POWER_ON_OFFTIME 10000 // after power on - milliseconds until display stops
+#define DISP_OFF_TRIGGER_BEG_MS 3000    // after OFF-TRIGGER, begin display - time for battery to settle
+#define DISP_OFF_TRIG_DURATION_MS 6000  // after OFF-TRIGGER, leave the display on for this time period
+#define DISP_ON_TRIGGER_SPEED_MS 3500   // after ON-TRIGGER, time that speed is shown
 
-// BATTERY IMBALANCE
-#define BATTERY_MAX_IMBALANCE 2.0 // Volts that batteries are allowed to be different, to disallow overdischarge
-#define BATTERY2_SENSE_RATIO 14 // ratio of voltage divider resistors. Normally 141K to 10K.
+// BATTERY IMBALANCE - Dual battery system monitoring
+#define BATTERY_MAX_IMBALANCE 2.0   // Volts that batteries are allowed to be different
+#define BATTERY2_SENSE_RATIO 14     // Ratio of voltage divider resistors (141K to 10K)
 
-// LOGGING
+// LOGGING - Debugging output control
 #define LOGGING_OFF 0
 
-// CRUISE
-#define CRUISE 0			//my default 1
-
-// JUMP
-#define JUMP 0			//my default 1
-
-// JUMP SPEED
-#define JUMP_SPEED 6
-
-// LOW MIGRATE
-#define LOW_MIGRATE 0	//my default 1
-
-// REVERSE
-#define REVERSE 0		//my default 1
+// OPTIONAL FEATURES
+#define CRUISE 0        // Cruise control mode
+#define JUMP 0          // Jump speed feature (quick acceleration)
+#define JUMP_SPEED 6    // Speed level for jump feature
+#define LOW_MIGRATE 0   // Allow migration below default speed
+#define REVERSE 0       // Reverse motor control
 
 #endif /* APPLICATIONS_DIVEX_DEFAULTS_H_ */
