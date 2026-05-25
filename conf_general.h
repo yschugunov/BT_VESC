@@ -8,7 +8,7 @@
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    The VESC firmware is distributed in the hope that it will be useful,
+    This firmware is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -166,6 +166,10 @@
 
 /*
  * Select default user motor configuration
+ * OPTIONS:
+ *  - mcconf_flipsky_7070_110kv.h (recommended for Flipsky 7070/110kv)
+ *  - mcconf_412_Sikorski.h (legacy)
+ *  - mcconf_60_Sikorski.h (legacy)
  */
 //#include			"mcconf_sten.h"
 //#include			"mcconf_sp_540kv.h"
@@ -175,6 +179,9 @@
 
 /*
  * Select default user app configuration
+ * OPTIONS:
+ *  - appconf_flipsky_7070_110kv.h (recommended for Flipsky 7070/110kv)
+ *  - appconf_sikorski.h (legacy)
  */
 //#include			"appconf_example_ppm.h"
 //#include			"appconf_custom.h"
@@ -188,8 +195,8 @@
 //#include "app_erockit_conf.h"
 
 #include "hw.h"
-#include "mcconf_412_Sikorski.h"
-#include "appconf_sikorski.h"
+#include "mcconf_flipsky_7070_110kv.h"
+#include "appconf_flipsky_7070_110kv.h"
 
 /*
  * Enable blackmagic probe output on SWD port
